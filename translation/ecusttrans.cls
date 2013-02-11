@@ -2,17 +2,20 @@
 % 继承article类
 \NeedsTeXFormat{LaTeX2e}
 \LoadClass[12pt]{article}
+\ProcessOptions\relax
 
 % 添加unicode支持
 \RequirePackage{fontspec}
 \RequirePackage{xunicode}
 \RequirePackage{xltxtra}
+
 % I have no idea what package hyperref is for ...
-\RequirePackage{hyperref}
+\RequirePackage{CJK}
+\RequirePackage{CJKpunct}
 \RequirePackage[top=1in, bottom=1in, left=0.9in, right=0.9in]{geometry}
 \RequirePackage{fancyhdr}
 % I have no idea what package hyperref is for ...
-\RequirePackage{lastpage}
+%\RequirePackage{lastpage}
 \RequirePackage{graphicx}
 \RequirePackage{verbatim}
 
@@ -46,8 +49,8 @@
 \newcommand\cTitle[1]{\def\@cTitle{#1}}
 \newcommand\cKeywords[1]{\def\@cKeywords{#1}}
 
-\def\label@cAbstract{摘要}
-\def\label@cKeywords{关键字}
+\def\label@cAbstract{摘\quad 要}
+\def\label@cKeywords{关\thinspace 键\thinspace 字}
 
 % 自定义翻译模版样式
 \fancypagestyle{translation}{
@@ -60,7 +63,7 @@
 \newenvironment{cAbstract}[1]{
 \wuhao
   \begin{flushleft}
-    \textbf{\label@cAbstract } }
-    {\textbf{\label@cKeywords } \@cKeywords
+    \textbf{\label@cAbstract }\quad}
+    {\textbf{\label@cKeywords }\quad \@cKeywords
   \end{flushleft}
 }
