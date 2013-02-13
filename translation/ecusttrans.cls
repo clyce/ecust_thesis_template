@@ -1,31 +1,23 @@
 \ProvidesClass{ecusttrans}[2013/02/10 ver.0.1b ECUST bachlor thesis class]
-% 继承article类
 \NeedsTeXFormat{LaTeX2e}
 \LoadClass[12pt]{article}
-\ProcessOptions\relax
 
-% 添加unicode支持
+% 添加中文支持
 \RequirePackage{fontspec}
 \RequirePackage{xunicode}
-\RequirePackage{xltxtra}
+\RequirePackage{xeCJK}
 
-% I have no idea what package hyperref is for ...
-\RequirePackage{CJK}
-\RequirePackage{CJKpunct}
+% 添加图片等的支持
 \RequirePackage[top=1in, bottom=1in, left=0.9in, right=0.9in]{geometry}
 \RequirePackage{fancyhdr}
-% I have no idea what package hyperref is for ...
-%\RequirePackage{lastpage}
 \RequirePackage{graphicx}
 \RequirePackage{verbatim}
-
 \RequirePackage{indentfirst}
+
 % 添加中文断句支持
 \XeTeXlinebreaklocale zh
 \XeTeXlinebreakskip = 0pt plus 1pt
 
-\setmainfont{SimSun}
-\linespread{1.2}
 % 定义字号大小
 \newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}
 \newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont}
@@ -40,8 +32,7 @@
 \newcommand{\liuhao}{\fontsize{7.875pt}{\baselineskip}\selectfont}
 \newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}
 
-\newcommand\zhenwen{\wuhao}
-
+% 定义文章信息
 \newcommand\eAuthor[1]{\def\@eAuthor{#1}}
 \newcommand\cStudent[1]{\def\@cStudent{#1}}
 \newcommand\cStudentClass[1]{\def\@cStudentClass{#1}}
@@ -51,19 +42,23 @@
 
 \def\label@cAbstract{摘\quad 要}
 \def\label@cKeywords{关\thinspace 键\thinspace 字}
+\def\label@cTranslation{翻\thinspace 译}
 
-% 自定义翻译模版样式
+\setCJKmainfont[BoldFont={FZYaSong-H-GBK}]{FZYaSong-M-GBK}
+\linespread{1.2}
+
+% 定义翻译模版样式
 \fancypagestyle{translation}{
-  \fancyhead[L]{\@cTitle \translation}
+  \fancyhead[L]{\wuhao{\@cTitle \quad \label@cTranslation}}
   \fancyhead[R]{\thepage}
   \fancyfoot[C]{}
   \fancypagestyle{empty}{\pagestyle{translation}}
 }
 
+% 定义摘要环境
 \newenvironment{cAbstract}[1]{
 \wuhao
-  \begin{flushleft}
-    \textbf{\label@cAbstract }\quad}
-    {\textbf{\label@cKeywords }\quad \@cKeywords
-  \end{flushleft}
-}
+  \noindent
+  \textbf{\label@cAbstract }\quad }{
+  \noindent
+  \textbf{\label@cKeywords }\quad \@cKeywords }
