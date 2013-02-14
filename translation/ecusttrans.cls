@@ -13,11 +13,23 @@
 \RequirePackage{graphicx}
 \RequirePackage{verbatim}
 \RequirePackage{indentfirst}
+% 允许修改section样式
+\RequirePackage{titlesec}
 
 % 添加中文断句支持
 \XeTeXlinebreaklocale zh
 \XeTeXlinebreakskip = 0pt plus 1pt
 
+% 设定默认英文字体
+\setmainfont{Liberation Serif}
+% 设定默认中文字体为宋体
+\setCJKmainfont{AR PL UMing CN}
+% 设定中文字体
+\setCJKfamilyfont{song}{AR PL UMing CN}
+\setCJKfamilyfont{hei}{WenQuanYi Zen Hei}
+
+% 设定指定中文字体简化命令
+\newcommand\heiti{\CJKfamily{hei}}
 % 定义字号大小
 \newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}
 \newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont}
@@ -40,25 +52,40 @@
 \newcommand\cTitle[1]{\def\@cTitle{#1}}
 \newcommand\cKeywords[1]{\def\@cKeywords{#1}}
 
-\def\label@cAbstract{摘\quad 要}
-\def\label@cKeywords{关\thinspace 键\thinspace 字}
-\def\label@cTranslation{翻\thinspace 译}
+\def\label@cAbstract{摘\quad 要：}
+\def\label@cKeywords{关\thinspace 键\thinspace 词：}
+\def\label@cTranslation{文献翻译}
 
-\setCJKmainfont[BoldFont={FZYaSong-H-GBK}]{FZYaSong-M-GBK}
 \linespread{1.2}
 
 % 定义翻译模版样式
 \fancypagestyle{translation}{
-  \fancyhead[L]{\wuhao{\@cTitle \quad \label@cTranslation}}
+  \fancyhead[L]{\wuhao{\@cTitle \quad （ \label@cTranslation ）}}
   \fancyhead[R]{\thepage}
   \fancyfoot[C]{}
   \fancypagestyle{empty}{\pagestyle{translation}}
+}
+
+% 定义标题
+\renewcommand\maketitle{
+  \begin{center}
+    \heiti
+    \xiaoerhao {\textbf\@cTitle}
+
+    \sihao{\@cStudentClass (\@cStudentNo )\quad \@cStudent}
+  \end{center}
 }
 
 % 定义摘要环境
 \newenvironment{cAbstract}[1]{
 \wuhao
   \noindent
-  \textbf{\label@cAbstract }\quad }{
+  {\heiti\textbf{\label@cAbstract} }\space}{
   \noindent
-  \textbf{\label@cKeywords }\quad \@cKeywords }
+  {\heiti\textbf{\label@cKeywords} }\@cKeywords 
+}
+
+% 定义section/subsection/subsubsection的样式
+\titleformat{\section}{\centering\xiaoerhao}{\thesection}{1em}{}
+\titleformat{\subsection}{\sihao}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\xiaosihao\heiti}{\thesubsubsection}{1em}{}
