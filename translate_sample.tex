@@ -1,4 +1,4 @@
-\documentclass[a4paper]{ecusttrans}
+\documentclass[a4paper]{ecust_translation}
 
 % !!非常重要!!
 % 这份模版使用了很多xeTeX的宏包，如xeXJK，fontspec等，因此：
@@ -35,8 +35,8 @@
 % ！请注意：很多中文字体没有粗体的概念，因此在TeX中简单地使用\textbf是
 % 不会出现粗体的（摊手），最好使用有独立的粗体和斜体的中文字体。如果使
 % 用的字体粗体和斜体是单独的名称，请参考下面格式进行引用。
-\setCJKmainfont[BoldFont={FZYaSong-H-GBK}]{FZYaSong-M-GBK}
-\setCJKfamilyfont{hei}[BoldFont=FZLanTingHei-B-GBK]{FZLanTingHei-R-GBK}
+% \setCJKmainfont[BoldFont={FZYaSong-H-GBK}]{FZYaSong-M-GBK}
+% \setCJKfamilyfont{hei}[BoldFont=FZLanTingHei-B-GBK]{FZLanTingHei-R-GBK}
 
 \begin{document}
   % 设置中文缩进
@@ -80,4 +80,8 @@
   \subsection{被试}
   一位19年前颈脊椎受过损伤\footnote{原文为~complete cervical spinal cord injury。}的男性被试（被试~S1）和一位健康的男性被试（被试~S2）参与了实验。两位被试分别在36岁和28岁有过BCI验的经历。
   \subsection{实验范式}
+
+  \begin{equation}
+  s_1, s_2= - \frac{B}{2G} \sqrt{(\frac{B}{2G})^2 - \frac{B}{C}}
+  \end{equation}
 \end{document}

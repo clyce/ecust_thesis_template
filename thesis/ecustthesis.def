@@ -1,7 +1,0 @@
-% TODO 这部分应该放到def文件中去！
-\def\eabstract{\textbf{abstract }}
-\def\cabstract{\textbf{摘要 }}
-\def\ekeywords{keywords }
-\def\ckeywords{关键词 }
-\def\translation{（文献翻译）}
-

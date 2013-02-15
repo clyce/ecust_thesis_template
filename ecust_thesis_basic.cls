@@ -1,4 +1,4 @@
-\ProvidesClass{ecusttrans}[2013/02/10 ver.0.1b ECUST bachlor thesis class]
+\ProvidesClass{ecust_thesis_basic}[2013/02/10 ver.0.1b ECUST bachlor thesis basic class]
 \NeedsTeXFormat{LaTeX2e}
 \LoadClass[12pt]{article}
 
