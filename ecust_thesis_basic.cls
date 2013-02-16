@@ -23,10 +23,12 @@
 % 设定默认英文字体
 \setmainfont{Liberation Serif}
 % 设定默认中文字体为宋体
-\setCJKmainfont{AR PL UMing CN}
+% \setCJKmainfont{AR PL UMing CN}
 % 设定中文字体
-\setCJKfamilyfont{song}{AR PL UMing CN}
-\setCJKfamilyfont{hei}{WenQuanYi Zen Hei}
+% \setCJKfamilyfont{song}{AR PL UMing CN}
+% \setCJKfamilyfont{hei}{WenQuanYi Zen Hei}
+\setCJKmainfont{SimSun}
+\setCJKfamilyfont{hei}{SimHei}
 
 % 设定指定中文字体简化命令
 \newcommand\heiti{\CJKfamily{hei}}
@@ -58,34 +60,14 @@
 
 \linespread{1.2}
 
-% 定义翻译模版样式
-\fancypagestyle{translation}{
-  \fancyhead[L]{\wuhao{\@cTitle \quad （ \label@cTranslation ）}}
-  \fancyhead[R]{\thepage}
-  \fancyfoot[C]{}
-  \fancypagestyle{empty}{\pagestyle{translation}}
-}
-
-% 定义标题
-\renewcommand\maketitle{
-  \begin{center}
-    \heiti
-    \xiaoerhao {\textbf\@cTitle}
-
-    \sihao{\@cStudentClass (\@cStudentNo )\quad \@cStudent}
-  \end{center}
-}
-
-% 定义摘要环境
-\newenvironment{cAbstract}[1]{
-\wuhao
-  \noindent
-  {\heiti\textbf{\label@cAbstract} }\space}{
-  \noindent
-  {\heiti\textbf{\label@cKeywords} }\@cKeywords 
-}
 
 % 定义section/subsection/subsubsection的样式
 \titleformat{\section}{\centering\xiaoerhao}{\thesection}{1em}{}
 \titleformat{\subsection}{\sihao}{\thesubsection}{1em}{}
 \titleformat{\subsubsection}{\xiaosihao\heiti}{\thesubsubsection}{1em}{}
+
+% 设置中文缩进
+\setlength{\parindent}{2em}
+% 设置标点符号挤压模式为半角，可选项有半角、全角、行末半角和开明
+\punctstyle{banjiao}
+
