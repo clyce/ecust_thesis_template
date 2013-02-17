@@ -23,7 +23,7 @@
   * 使用 TeXWorks 这类专用编辑器的童鞋请选择 XeLaTeX 然后运行即可；
   * 喜欢用命令行的同学请在终端输入：（当然得在包含模版的目录下）
 
-    xelatex sample.tex
+	xelatex sample.tex
 
 ## 错误报告 ##
 ## 版本更新 ##
