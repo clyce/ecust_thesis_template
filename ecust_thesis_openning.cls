@@ -14,23 +14,21 @@
 
 }
 
-% 定义翻译模版样式
-\fancypagestyle{translation}{
-  \fancyhead[L]{\wuhao{\@cTitle \quad （ \label@cTranslation ）}}
-  \fancyhead[R]{\thepage}
-  \fancyfoot[C]{}
-  \fancypagestyle{empty}{\pagestyle{translation}}
-}
-
 % 定义摘要环境
 \newenvironment{cAbstract}[1]{
 \wuhao
   \noindent
-  {\heiti\textbf{\label@cAbstract} }\space}{
+  {\heiti{\label@cAbstract} }\space}{
   \noindent
-  {\heiti\textbf{\label@cKeywords} }\@cKeywords 
+  {\heiti{\label@cKeywords} }\@cKeywords 
 }
 
-% 设置页面样式为 translation（自定义样式）
-% 具体请参考ecusttrans.cls:61-67
-\pagestyle{translation}
+% 定义开题报告模版样式
+\fancypagestyle{openning}{
+  \fancyhead[L]{\wuhao{\@cTitle \quad （开题报告）}}
+  \fancyhead[R]{\thepage}
+  \fancyfoot[C]{}
+  \fancypagestyle{empty}{\pagestyle{openning}}
+}
+
+\pagestyle{openning}

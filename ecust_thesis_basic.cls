@@ -13,20 +13,18 @@
 \RequirePackage{graphicx}
 \RequirePackage{verbatim}
 \RequirePackage{indentfirst}
-% 允许修改section样式
+% 添加对改动section样式的支持
 \RequirePackage{titlesec}
+\RequirePackage{ifthen}
 
 % 添加中文断句支持
 \XeTeXlinebreaklocale zh
 \XeTeXlinebreakskip = 0pt plus 1pt
 
 % 设定默认英文字体
-\setmainfont{Liberation Serif}
-% 设定默认中文字体为宋体
-% \setCJKmainfont{AR PL UMing CN}
+\setmainfont{Times New Roman}
 % 设定中文字体
-% \setCJKfamilyfont{song}{AR PL UMing CN}
-% \setCJKfamilyfont{hei}{WenQuanYi Zen Hei}
+% 设定默认中文字体为宋体
 \setCJKmainfont{SimSun}
 \setCJKfamilyfont{hei}{SimHei}
 
@@ -47,27 +45,22 @@
 \newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}
 
 % 定义文章信息
-\newcommand\eAuthor[1]{\def\@eAuthor{#1}}
-\newcommand\cStudent[1]{\def\@cStudent{#1}}
-\newcommand\cStudentClass[1]{\def\@cStudentClass{#1}}
-\newcommand\cStudentNo[1]{\def\@cStudentNo{#1}}
-\newcommand\cTitle[1]{\def\@cTitle{#1}}
+\renewcommand\author[1]{\def\@author{#1}}
+\newcommand\class[1]{\def\@class{#1}}
+\newcommand\studentNo[1]{\def\@studentNo{#1}}
+\renewcommand\title[1]{\def\@title{#1}}
 \newcommand\cKeywords[1]{\def\@cKeywords{#1}}
+\newcommand\eKeywords[1]{\def\@eKeywords{#1}}
 
-\def\label@cAbstract{摘\quad 要：}
-\def\label@cKeywords{关\thinspace 键\thinspace 词：}
-\def\label@cTranslation{文献翻译}
+\def\label@translation{文献翻译}
+\def\label@openning{开题报告}
 
+% 全文默认行距（这样看上去和word中的1.5倍行距差不多）
 \linespread{1.2}
-
 
 % 定义section/subsection/subsubsection的样式
 \titleformat{\section}{\centering\xiaoerhao}{\thesection}{1em}{}
 \titleformat{\subsection}{\sihao}{\thesubsection}{1em}{}
 \titleformat{\subsubsection}{\xiaosihao\heiti}{\thesubsubsection}{1em}{}
 
-% 设置中文缩进
-\setlength{\parindent}{2em}
-% 设置标点符号挤压模式为半角，可选项有半角、全角、行末半角和开明
-\punctstyle{banjiao}
 
