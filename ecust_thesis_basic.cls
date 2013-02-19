@@ -15,6 +15,8 @@
 \RequirePackage{indentfirst}
 % 允许修改section样式
 \RequirePackage{titlesec}
+% 添加条件判断的支持
+\RequirePackage{ifthen}
 
 % 添加中文断句支持
 \XeTeXlinebreaklocale zh
@@ -47,27 +49,28 @@
 \newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}
 
 % 定义文章信息
-\newcommand\eAuthor[1]{\def\@eAuthor{#1}}
-\newcommand\cStudent[1]{\def\@cStudent{#1}}
-\newcommand\cStudentClass[1]{\def\@cStudentClass{#1}}
-\newcommand\cStudentNo[1]{\def\@cStudentNo{#1}}
-\newcommand\cTitle[1]{\def\@cTitle{#1}}
+\newcommand\author[1]{\def\@author{#1}}
+\newcommand\class[1]{\def\@class{#1}}
+\newcommand\studentNo[1]{\def\@studentNo{#1}}
+\newcommand\title[1]{\def\@title{#1}}
+\newcommand\eKeywords[1]{\def\@eKeywords{#1}}
 \newcommand\cKeywords[1]{\def\@cKeywords{#1}}
 
-\def\label@cAbstract{摘\quad 要：}
-\def\label@cKeywords{关\thinspace 键\thinspace 词：}
-\def\label@cTranslation{文献翻译}
+\def\label@cAbstract{摘\quad 要}
+\def\label@eAbstract{Abstract}
+\def\label@cKeywords{关\thinspace 键\thinspace 词}
+\def\label@eKeywords{Keywords}
 
 \linespread{1.2}
-
 
 % 定义section/subsection/subsubsection的样式
 \titleformat{\section}{\centering\xiaoerhao}{\thesection}{1em}{}
 \titleformat{\subsection}{\sihao}{\thesubsection}{1em}{}
 \titleformat{\subsubsection}{\xiaosihao\heiti}{\thesubsubsection}{1em}{}
 
-% 设置中文缩进
-\setlength{\parindent}{2em}
-% 设置标点符号挤压模式为半角，可选项有半角、全角、行末半角和开明
-\punctstyle{banjiao}
+% TODO 这部分代码需要推敲
+\renewenvironment{\abstract}[1][]
+{
+  \ifthenelse{\equal{#1}{chinese}}{chinese}{english}
+}{}
 

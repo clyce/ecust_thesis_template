@@ -6,10 +6,9 @@
 % 定义标题
 \renewcommand\maketitle{
   \begin{center}
-    \heiti
-    \xiaoerhao {\textbf\@cTitle}
+    \heiti \xiaoerhao {\@cTitle}
 
-    \sihao{\@cStudentClass (\@cStudentNo )\quad \@cStudent}
+    \sihao{\@class (\@cStudentNo )\quad \@author}
   \end{center}
 
 }
