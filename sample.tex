@@ -1,0 +1,83 @@
+\documentclass[a4paper]{ecust_thesis_translation}
+
+% !!非常重要!!
+% 这份模版使用了很多xeTeX的宏包，如xeXJK，fontspec等，因此：
+% **请使用xeTeX编译**
+
+
+% 设定文献翻译相关信息
+% eAuthor=英文原作者
+% cStudent=中文翻译者（学生）
+% cTitle=论文中文标题
+% cKeywords=论文中文关键字
+\author{王\quad 翔}
+\class{电自 091}
+\studentNo{10094309}
+\title{一种基于Boosting的可用于脑机接口的P300检测方法}
+\cKeywords{Boosting, 脑机接口, 自发脑电, P300, 最小二乘法}
+\eKeywords{Boosting, BCI, EEG, P300}
+
+
+% 可以按照个人的喜好自行设置字体，默认字体为
+% - 英文=Liberation Serif；
+% - 宋体=AR PL UMing CN（简体宋体）；
+% - 黑体=WenQuanYi Zen Hei（文泉驿正黑）;
+% 具体请参考ecusttrans.cls:23-29
+
+% 自行设置字体可参考此处
+\setmainfont{Liberation Serif}
+\setCJKmainfont[BoldFont={FZYaSong-H-GBK}]{FZYaSong-M-GBK}
+\setCJKfamilyfont{hei}[BoldFont=FZLanTingHei-B-GBK]{FZLanTingHei-R-GBK}
+% 请注意：很多中文字体没有粗体的概念，因此在TeX中简单地使用\textbf是
+% 不会出现粗体的（摊手），最好使用有独立的粗体和斜体的中文字体。如果使
+% 用的字体粗体和斜体是单独的名称，请参考下面格式进行引用。
+
+\newcommand\unsure{\textit}
+
+\begin{document}
+% 设置中文缩进
+\setlength{\parindent}{2em}
+% 设置标点符号挤压模式为半角，可选项有半角、全角、行末半角和开明
+\punctstyle{banjiao}
+
+  % 模版使用形式和普通article类一样
+  % - 使用\maketitle命令显示标题；
+  % - 使用\section{}命令开始一个章节；
+  % - 使用\subsection{}开始一个子章节；
+  % - 使用\subsubsection{}开始一个孙章节；
+
+  \maketitle
+
+  % - 使用\begin{cAbstract} 和 end{cAbstract} 来开始和结束中文摘要
+  %   模版会自动加载关键词。
+  \begin{abstract}[chinese]
+  Gradient boosting 是一类通过多个弱分类器来建立强分类器的机器学习算法。本文主要描述了一种基于 gradient boosting 用于检测自发脑电（EEG）中的事件相关电位（ERP）的 gradient boosting 算法。该算法用于检测人的自发脑电中的 P300 信号，并将检测到的信号作为一个拼写装置的原始信号。本文所述方法的关键特性在于其分类的准确性及其概念的简单性。本算法经过一组由本实验室记录的数据集以及一组2003年BCI竞赛中所用到的测试数据集的测试。P300 拼写范式实验中的准确率在90\%到100\%之间。尤为突出的是，本算法完全正确地完成了所有出自 BCI 竞赛测试数据集的字符推断任务。
+  \end{abstract}
+
+  \section{导论}
+
+  P300是一种人类自发脑电中的特征波形，一般作为对小概率刺激事件的响应出现。经典的 Oddball 范式实验常常用来诱发P300：呈现给被试的是随机顺序的两类刺激，其中靶刺激为小概率事件，被试则被要求判断刺激是否为靶刺激。
+
+  L.A.Farwell 和 E.Donchin 曾首创性地用 Oddball 范式来进行脑机接口实验。在实验过程中，一个装有字母符号的6x6的矩阵被呈现给用户，该矩阵的行和列会按照随机顺序点亮。被试可以通过默记目标字符的点亮次数来从矩阵中选择一个字符。目标字符每点亮一次，就会诱发一个 P300 波，使用特定的算法就可以检测到该 P300 波形。
+
+  本文阐述了一种简单却强大的方法来从自发脑电中检测 P300，并用该方法来建立一个基于 P300 的拼写装置。我们使用了 gradient boosting 和最小二乘法相结合的方式来建立P300检测器。
+
+  Gradient boosting 和最小二乘法的组合是一种有意思的检测 P300 的方法，因为这对组合有如下特性：
+
+  \begin{itemize}
+    \item 该算法通过一种朴素的方式建立线性分类规则，因此将分类器套用到新的数据上只需要少量操作，且可以实时地对 EEG 进行分类操作。此外，分类规则也很非常易于理解，也就是说，从分类规则可以很容易地看出哪些样本和哪些通道对于检测 P300 比较重要。
+    \item 在分类准确度上，本文所所述方法和当前最先进的方法相比效果更为显著。以2003年 BCI 竞赛的测试数据为例，gradient boosting 略优于优胜方案。
+    \item 复杂的优化算法，例如支持向量机或者独立组件分析方法，对本文所述方法而言都不是必需的。因此本算法具有易于实现、使用和扩展的特性。
+  \end{itemize}
+
+  本文余下部分的主要安排如下：第二节主要阐述本实验所使用的实验范式、被试和数据处理；第三节主要阐述 boosting 算法；第四节则主要阐述分类器的输出是如何用于推断被试选择的字符的；实验结果呈现在第五节；第六节对全文做了总结。
+
+  \section{被试和方法}
+  \subsection{被试}
+
+  一位19年前颈脊椎受过损伤\footnote{原文为 complete cervical spinal cord injury。}的男性被试（被试 S1）和一位健康的男性被试（被试 S2）参与了实验。两位被试分别在36岁和28岁有过BCI验的经历。
+
+  \subsection{实验范式}
+
+  \unsure{我们使用了类似于文献[1]中所述的方法来记录和标机数据，展示给被试的是一个显示在笔记本显示器上的装有字母和数字1-9的6x6矩阵。}该矩阵的行和列以100毫秒的间隔交替闪烁，且矩阵的闪烁经过\unsure{block randomize}处理，也就是说，经过12次高亮闪烁后，每一行和每一列都恰好被点亮了一次。
+\end{document}

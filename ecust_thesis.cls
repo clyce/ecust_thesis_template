@@ -3,20 +3,28 @@
 \LoadClass[12pt]{ecust_thesis_basic}
 
 
-% 定义标题
+% 定义标题页
 \renewcommand\maketitle{
+\cleardoublepage
+\begin{titlepage}
+  % \headspace{30pt}
   \begin{center}
-    \heiti
-    \xiaoerhao {\textbf\@cTitle}
+    % 第一部分，校名和<毕业设计(论文)字样>
+    \vfill
+    \includegraphics[width=0.53\textwidth]{img/ecust_logo_png}
 
-    \sihao{\@cStudentClass (\@cStudentNo )\quad \@cStudent}
+    \vspace{45pt}
+    \chuhao{\heiti \space 毕\thinspace 业\thinspace 设\thinspace 计（论\thinspace 文）}
+
+    \thispagestyle{empty}
+    \clearpage
   \end{center}
-
+\end{titlepage}
 }
 
 % 定义翻译模版样式
 \fancypagestyle{translation}{
-  \fancyhead[L]{\wuhao{\@cTitle \quad （ \label@cTranslation ）}}
+  \fancyhead[L]{\wuhao{\@title }}
   \fancyhead[R]{\thepage}
   \fancyfoot[C]{}
   \fancypagestyle{empty}{\pagestyle{translation}}
@@ -24,13 +32,10 @@
 
 % 定义摘要环境
 \newenvironment{cAbstract}[1]{
-\wuhao
+  \wuhao
   \noindent
-  {\heiti\textbf{\label@cAbstract} }\space}{
+  {\heiti\textbf{摘\quad 要}\space }}{
   \noindent
-  {\heiti\textbf{\label@cKeywords} }\@cKeywords 
+  {\heiti\textbf{关\, 键\, 字}\space }\@cKeywords 
 }
 
-% 设置页面样式为 translation（自定义样式）
-% 具体请参考ecusttrans.cls:61-67
-\pagestyle{translation}

@@ -13,7 +13,7 @@
 \RequirePackage{graphicx}
 \RequirePackage{verbatim}
 \RequirePackage{indentfirst}
-% 允许修改section样式
+% 添加对改动section样式的支持
 \RequirePackage{titlesec}
 % 添加条件判断的支持
 \RequirePackage{ifthen}
@@ -23,12 +23,9 @@
 \XeTeXlinebreakskip = 0pt plus 1pt
 
 % 设定默认英文字体
-\setmainfont{Liberation Serif}
-% 设定默认中文字体为宋体
-% \setCJKmainfont{AR PL UMing CN}
+\setmainfont{Times New Roman}
 % 设定中文字体
-% \setCJKfamilyfont{song}{AR PL UMing CN}
-% \setCJKfamilyfont{hei}{WenQuanYi Zen Hei}
+% 设定默认中文字体为宋体
 \setCJKmainfont{SimSun}
 \setCJKfamilyfont{hei}{SimHei}
 
@@ -53,14 +50,13 @@
 \newcommand\class[1]{\def\@class{#1}}
 \newcommand\studentNo[1]{\def\@studentNo{#1}}
 \newcommand\title[1]{\def\@title{#1}}
-\newcommand\eKeywords[1]{\def\@eKeywords{#1}}
 \newcommand\cKeywords[1]{\def\@cKeywords{#1}}
+\newcommand\eKeywords[1]{\def\@eKeywords{#1}}
 
-\def\label@cAbstract{摘\quad 要}
-\def\label@eAbstract{Abstract}
-\def\label@cKeywords{关\thinspace 键\thinspace 词}
-\def\label@eKeywords{Keywords}
+\def\label@translation{文献翻译}
+\def\label@openning{开题报告}
 
+% 全文默认行距（这样看上去和word中的1.5倍行距差不多）
 \linespread{1.2}
 
 % 定义section/subsection/subsubsection的样式
@@ -68,9 +64,9 @@
 \titleformat{\subsection}{\sihao}{\thesubsection}{1em}{}
 \titleformat{\subsubsection}{\xiaosihao\heiti}{\thesubsubsection}{1em}{}
 
-% TODO 这部分代码需要推敲
-\renewenvironment{\abstract}[1][]
-{
-  \ifthenelse{\equal{#1}{chinese}}{chinese}{english}
-}{}
-
+% % TODO 这部分代码需要推敲
+% \renewenvironment{\abstract}[1][]
+% {
+%   \ifthenelse{\equal{#1}{chinese}}{chinese}{english}
+% }{}
+% 
