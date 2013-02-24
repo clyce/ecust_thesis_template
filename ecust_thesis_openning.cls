@@ -7,7 +7,7 @@
 \renewcommand\maketitle{
   \begin{center}
     \heiti
-    \xiaoerhao {\textbf\@cTitle}
+    \xiaoerhao {\@cTitle}
 
     \sihao{\@cStudentClass (\@cStudentNo )\quad \@cStudent}
   \end{center}

@@ -31,6 +31,7 @@
 
 % 设定指定中文字体简化命令
 \newcommand\heiti{\CJKfamily{hei}}
+\newcommand\immature[1]{\textbf{#1}}
 % 定义字号大小
 \newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}
 \newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont}
@@ -46,10 +47,10 @@
 \newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}
 
 % 定义文章信息
-\newcommand\author[1]{\def\@author{#1}}
+\renewcommand\author[1]{\def\@author{#1}}
 \newcommand\class[1]{\def\@class{#1}}
 \newcommand\studentNo[1]{\def\@studentNo{#1}}
-\newcommand\title[1]{\def\@title{#1}}
+\renewcommand\title[1]{\def\@title{#1}}
 \newcommand\cKeywords[1]{\def\@cKeywords{#1}}
 \newcommand\eKeywords[1]{\def\@eKeywords{#1}}
 

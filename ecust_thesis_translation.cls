@@ -9,7 +9,7 @@
     \heiti
     \xiaoerhao {\textbf\@title}
 
-    \sihao{\@class (\@studentNo )\quad \@author}
+    \sihao{\@class \quad (\@studentNo )\quad \@author}
   \end{center}
 
 }
@@ -20,7 +20,7 @@
   % 如果注明是中文摘要的话
   \ifthenelse{\equal{#1}{chinese}}{
   % 就以“摘 要”字样开始中文摘要
-  \heiti{摘\quad 要}\quad\thinspace
+  {\heiti摘\quad\space 要\quad}\,
   \def\@chinese{1}}
   % 否则以“Abstract”开始英文摘要
   {\textbf{Abstract}\quad
@@ -29,7 +29,7 @@
   % 摘要下面的关键词排版同上
   {\vspace{1.2em} \\
   \noindent
-  \ifthenelse{\equal{1}{\@chinese}}{\heiti{关\thinspace 键\thinspace 词\quad} \@cKeywords}{\textbf{Keywords\quad} \@eKeywords}
+  \ifthenelse{\equal{1}{\@chinese}}{{\heiti关\, 键\, 词\quad} \@cKeywords}{\textbf{Keywords\quad} \@eKeywords}
 }
 
 % 定义翻译模版样式
