@@ -98,5 +98,18 @@ Boosting 方法被用来根据训练数据计算出一个用来检测 P300 的�
   \item 先前的实验表明，应用于噪声非常大的数据集上时回归树算法可能较最小二乘法在\!{归一化错误}上有轻微优势。然而在特定信噪比的脑电下，最小二乘法的表现较回归树算法更优。
 \end{itemize}
 
+我们来详细讨论一下 boosting 方法和最小二乘法。我们将第$m$步分类器的集合记为$F_m$，将训练数据记为$X={x_i\in \mathbb{R}^K, i=1\ldots N}$，将对应的分类标签记为$Y={y_i \in {0,1}, i=1\ldots N}$。$K=C\times S$表示特征的数量，其中的$C$是自发脑电的通道数量，$S$则是每一个\!{epoch}的样本数量。逻辑斯蒂克回归模型如下所示：
+
+\begin{equation}
+p_m(y_i=1|x_i)=\frac{e^{F_m(x_i)}}{e^{F_m(x_i)}+e^{-F_m(x_i)}}
+\end{equation}
+
+$F_m$的\!{Bernuolli log-likelihood\footnote{伯努利对数似然函数}}如下式所示：
+
+\begin{equation}
+L(F_m; X, Y)=log(\prod\limits^N_{i=1}{p_m(y_i=1|x_i)^{y_i}p_m(y_i=0|x_i)^{1-y_i}})
+\end{equation}
+
+该似然函数在$F_0:=0$，$F_m=F_{m-1}+f_m$
 
 \end{document}
