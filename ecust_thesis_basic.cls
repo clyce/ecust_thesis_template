@@ -18,6 +18,10 @@
 % 添加条件判断的支持
 \RequirePackage{ifthen}
 
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\newcommand\origin[1]{\footnote{原文为\quad \textit{#1}}}
+
 % 添加中文断句支持
 \XeTeXlinebreaklocale zh
 \XeTeXlinebreakskip = 0pt plus 1pt
@@ -61,13 +65,7 @@
 \linespread{1.2}
 
 % 定义section/subsection/subsubsection的样式
-\titleformat{\section}{\centering\xiaoerhao}{\thesection}{1em}{}
-\titleformat{\subsection}{\sihao}{\thesubsection}{1em}{}
-\titleformat{\subsubsection}{\xiaosihao\heiti}{\thesubsubsection}{1em}{}
+\titleformat{\section}{\centering\xiaoerhao}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\sihao}{\thesubsection}{0.7em}{}
+\titleformat{\subsubsection}{\xiaosihao\heiti}{\thesubsubsection}{0.7em}{}
 
-% % TODO 这部分代码需要推敲
-% \renewenvironment{\abstract}[1][]
-% {
-%   \ifthenelse{\equal{#1}{chinese}}{chinese}{english}
-% }{}
-% 

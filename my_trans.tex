@@ -13,7 +13,7 @@
 \author{王\ \ 翔}
 \class{电自 091}
 \studentNo{10094309}
-\title{一种基于Boosting的脑机接口 P300 检测方法}
+\title{一种脑机接口中检测 P300 的 Boosting 方法}
 \cKeywords{Boosting, 脑机接口, 自发脑电, P300, 最小二乘法}
 \eKeywords{Boosting, BCI, EEG, P300}
 
@@ -34,7 +34,7 @@
 
 \renewcommand\![1]{\immature{#1}}
 
-\newcommand\unsure{\textit}
+\usepackage{hyperref}
 
 \begin{document}
 % 设置中文缩进
@@ -53,63 +53,152 @@
 % - 使用\begin{cAbstract} 和 end{cAbstract} 来开始和结束中文摘要
 %   模版会自动加载关键词。
 \begin{abstract}[chinese]
-Gradient boosting 是一类通过多个弱分类器来建立强分类器的机器学习算法。本文主要描述了一种基于 gradient boosting 用于检测自发脑电（EEG）中的事件相关电位（ERP）的 gradient boosting 算法。该算法用于检测人的自发脑电中的 P300 信号，并将检测到的信号作为一个拼写装置的原始信号。本文所述方法的关键特性在于其分类的准确性及其概念的简单性。本算法经过一组由本实验室记录的数据集以及一组2003年BCI竞赛中所用到的测试数据集的测试。P300 拼写范式实验中的准确率在90\%到100\%之间。尤为突出的是，本算法完全正确地完成了所有出自 BCI 竞赛测试数据集的字符推断任务。
+  Gradient boosting 是一种通过弱分类器\origin{weak classifier}来训练强分类器的机器学习算法。本文提出了一种基于 gradient boosting 的算法，并用该算法检测自发脑电（EEG）中的事件相关电位（ERP）。该算法检测人自发脑电中的 P300 信号，并将检测到的信号输入拼写装置。本文所述方法的创新点在于其分类的准确度及其概念的简单性。本算法经过本实验室记录的数据以及2003年 BCI 竞赛中所用到的测试数据的测试，测试反映 P300 拼写准确率在90\%到100\%之间，其中利用 BCI 竞赛数据进行的的测试准确率则高达100\%。
 \end{abstract}
 
-\section{导论}
+\section{引论}
 
-P300是一种人类自发脑电中的特征波形，一般作为对小概率刺激事件的响应出现。经典的 Oddball 范式实验常常用来诱发P300：呈现给被试的是随机顺序的两类刺激，其中靶刺激为小概率事件，被试则被要求判断刺激是否为靶刺激。
+P300 是一种人类脑电图中的特殊波形，一般作为对小概率刺激事件的响应出现。经典 Oddball 实验常用于触发 P300：实验过程中会随机出现两种类型的刺激，其中小概率的为靶刺激，被试则要判断每一次呈现的刺激是否为靶刺激。
 
-L.A.Farwell 和 E.Donchin 曾首创性地用 Oddball 范式来进行脑机接口实验。在实验过程中，一个装有字母符号的6x6的矩阵被呈现给用户，该矩阵的行和列会按照随机顺序点亮。被试可以通过默记目标字符的点亮次数来从矩阵中选择一个字符。目标字符每点亮一次，就会诱发一个 P300 波，使用特定的算法就可以检测到该 P300 波形。
+L.A.Farwell 和 E.Donchin 最先使用 Oddball 范式进行脑机接口实验。实验过程如下：被试注视着一个含有字符（字母和数字）的6x6的矩阵，该矩阵的行和列会按随机顺序闪烁。被试可以通过记数目标字符的点亮次数来选取矩阵中的字符。目标字符每点亮一次，就诱发一个 P300 波形，这个波形可以通过适当的算法加以检测。
 
-本文阐述了一种简单却强大的方法来从自发脑电中检测 P300，并用该方法来建立一个基于 P300 的拼写装置。我们使用了 gradient boosting 和最小二乘法相结合的方式来建立P300检测器。
-
-Gradient boosting 和最小二乘法的组合是一种有意思的检测 P300 的方法，因为这对组合有如下特性：
+本文介绍了一种简单而有效的 P300 检测方法，并据此训练了一个基于 P300 的拼写装置。我们用 gradient boosting 和最小二乘回归法\origin{ordinary least squares regression}来训练 P300 检测器。相比当前的主流方法，该算法由于下列特性而尤为值得关注：
 
 \begin{itemize}
-  \item 该算法通过一种朴素的方式建立线性分类规则，因此将分类器套用到新的数据上只需要少量操作，且可以实时地对 EEG 进行分类操作。此外，分类规则也很非常易于理解，也就是说，从分类规则可以很容易地看出哪些样本和哪些通道对于检测 P300 比较重要。
-  \item 在分类准确度上，本文所所述方法和当前最先进的方法相比效果更为显著。以2003年 BCI 竞赛的测试数据为例，gradient boosting 略优于优胜方案。
-  \item 复杂的优化算法，例如支持向量机或者独立组件分析方法，对本文所述方法而言都不是必需的。因此本算法具有易于实现、使用和扩展的特性。
+  \item 该算法训练线性分类规则的方法很简单，将分类器套用到新的数据上只需要少量操作，且可以实时进行 EEG 分类操作。此外，分类规则也非常简单易懂，从分类规则能很容易地判断哪些样本和哪些通道在检测 P300 的过程中比较重要。
+  \item 相比在当前主流方法，本文所所述方法和分类准确度上更具优势。以2003年 BCI 竞赛的测试数据为例，gradient boosting 的分类效果略优于优胜方案。
+  \item 本文所述算法无需进行复杂的优化，如支持向量机或者独立组件分析法\origin{independent component analysis}。因此本算法具有易于实现、使用和扩展的特性。
 \end{itemize}
 
-本文余下部分的主要安排如下：第二节主要阐述本实验所使用的实验范式、被试和数据处理；第三节主要阐述 boosting 算法；第四节则主要阐述分类器的输出是如何用于推断被试选择的字符的；实验结果呈现在第五节；第六节对全文做了总结。
+本文余下部分的主要安排如下：第二节主要阐述本实验所使用的实验范式、被试的情况和数据处理方法；第三节主要介绍 boosting 算法；第四节则主要阐述分类器的输出是如何用于推断被试选择的字符的；实验结果在第五节；最后，第六节就全文做了总结。
 
 \section{被试和方法}
 \subsection{被试}
-一位19年前颈脊椎受过损伤\footnote{原文为 complete cervical spinal cord injury。}的男性被试（被试 S1）和一位健康的男性被试（被试 S2）参与了实验。两位被试分别在36岁和28岁有过BCI验的经历。
+一位19年前颈脊椎受过损伤\origin{complete cervical spinal cord injury。}的男性被试（被试 S1）和一位健康的男性被试（被试 S2）参与了实验。两位被试分别在36岁和28岁时参加过脑机接口实验。
 
 \subsection{实验范式}
-我们用一套类似于文献[1]中的方法来记录和标记数据。展示给被试的是一个显示在笔记本显示器上的装有字母和数字1$-$9的6x6矩阵，该矩阵的行和列以100毫秒的间隔交替闪烁，闪烁经过\immature{block randomize}处理，经过12次闪烁后，每一行和每一列都恰好被点亮一次。
+我们用文献[1]中提到的方法来记录和标记数据，被试注视这一笔记本显示器上的含有字母和数字$1-9$的$6\times 6$矩阵，该矩阵的行和列以100毫秒的间隔交替闪烁，闪烁经过区块随机化\origin{block randomize}处理，经过12次闪烁后，每一行和每一列都恰好被点亮一次。
 
-在每次实验中，被试被要求计数目标字符在矩阵中闪烁的次数。目标字符由操作员描述，并出现在屏幕的下方。每次实验闪烁的次数由系统随机地在$9\times 12, 10\times 12$或$11\times 12$中选择。为了观察被试的\immature{表现}，在每次实验之后都会有一小段休息时间，被试要向操作员汇报他们计数的结果。
+被试要记数每次实验中矩阵种目标字符闪烁的次数。目标字符由操作员告诉被试，同时显示在屏幕下方。单次实验中，矩阵闪烁的次数是随机的，有可能是$9\times 12$次, $10\times 12$次或$11\times 12$次。为了观察被试的\immature{表现}，每次实验之后都会有一小段休息时间，被试要向操作员汇报他们记数的结果。
 
-\!{每位被试都在两天内进行了测试并记录了两组数据集}，在第一轮实验测试中，被试要拼写法语单词 ''lac'', ''nuage'', ''montagne''和''soleil''。在第二轮实验中，被试则拼写了 ''fromage'', ''chocolat'', ''pain''和''vin''。
+两位被试都在两天内参与了两组实验，第一组实验\origin{session}要求被试拼写法语单词 ''lac'', ''nuage'', ''montagne''和''soleil''；第二组实验则要求拼写单词 ''fromage'', ''chocolat'', ''pain''和''vin''。
 
 \subsection{数据采集和预处理}
-数据由 Biosemi Active 2 系统在2048Hz采样频率下采样 Fp1, Fp2, AF3, AF4, F7, F3, F4, F8, FC1, FC5, FC6, FC2, T7, C3, Cz, C4, T8, CP1, CP5, CP6, CP2, P7, P3, P4, P8, PO3, PO4, O1, Oz, O2 通道下采样获得。\!{epochs}
+数据由 Biosemi Active 2 系统在 2048Hz 频率下采样获得，采样通道为 Fp1, Fp2, AF3, AF4, F7, F3, F4, F8, FC1, FC5, FC6, FC2, T7, C3, Cz, C4, T8, CP1, CP5, CP6, CP2, P7, P3, P4, P8, PO3, PO4, O1, Oz, O2。采样获得数据中每次闪烁起1秒时间内的数据被提取出来，称为时间元\origin{epoch}。每个通道的数据经过线性最小二乘拟合去除漂移\origin{slow drift}后，参考O1,Oz和O2的平均值进行调整\origin{re-referenced}，随后输入通频带为0到9Hz的7阶 Butterworth 低通滤波器，再抽值采样为128Hz。由于不含有和 P300 有关的信息，参考通道和T7通道的数据不再用于计算。
+
 \subsection{伪迹的去除}
-为了消除伪迹，样本的每一段\!{epoch} 的绝对值被计算出来。然后，每一段\!{epoch} 的最大绝对值被选为这个\!{epoch} 的特征值，这些数据以降序排列，其中前5\% ，也就是绝对值很大的\!{epoch} 会被舍弃。
+为了消除伪迹，计算样本中每段时间元的绝对值，每一段时间元的最大绝对这个时间元的特征值。这些数据以降序排列，其中前5\% ，即绝对值较大大的时间元会被舍弃。
 
 \section{Boosting 最小二乘法}
-Boosting 方法被用来根据训练数据计算出一个用来检测 P300 的函数。特别是 gradient boosting 被用于逐步最大化逻辑斯蒂克回归模型的\!{Bernuolli log likelihood}。文献[3],[4]中描述方法中\!{Bernuolli log likelihood} 的逐步最大化和[2]中的回归树算法是弱学习算法。本文则使用最小二乘法回归作为弱学习算法，这是由以下因素所决定的：
+Boosting 方法被用来根据训练数据训练 P300 检测函数。Gradient boosting 算法被用于逐步求解逻辑斯蒂克回归模型的伯努利对数似然函数的最大化问题\origin{gradient boosting was used to stepwise maxmize the Bernuolli log-likelihood of a logistic regression model}。文献[3],[4]阐述了伯努利对数似然函数最大化问题，并使用回归树算法[2]作为弱学习算法对其求解。本文使用最小二乘法回归作为弱学习算法，这是出于以下考虑：
 \begin{itemize}
-  \item 使用最小二乘法我们得到一个易于理解和分析的离散函数$F$：它是自发脑电样本的简单线性组合；
+  \item 使用最小二乘法，离散函数$F$易于理解便于分析，它是自发脑电样本的简单线性组合；
   \item 相比回归树算法，最小二乘法可以节省更多计算资源，因此用于训练分类器的时间可以大为缩短；
-  \item 先前的实验表明，应用于噪声非常大的数据集上时回归树算法可能较最小二乘法在\!{归一化错误}上有轻微优势。然而在特定信噪比的脑电下，最小二乘法的表现较回归树算法更优。
+  \item 先前的实验表明，应用于噪声非常大的数据上时回归树算法可能较最小二乘法在通用性\origin{generalization error}上有轻微优势。然而在特定信噪比的脑电下，最小二乘法的表现较回归树算法更优。
 \end{itemize}
 
-我们来详细讨论一下 boosting 方法和最小二乘法。我们将第$m$步分类器的集合记为$F_m$，将训练数据记为$X={x_i\in \mathbb{R}^K, i=1\ldots N}$，将对应的分类标签记为$Y={y_i \in {0,1}, i=1\ldots N}$。$K=C\times S$表示特征的数量，其中的$C$是自发脑电的通道数量，$S$则是每一个\!{epoch}的样本数量。逻辑斯蒂克回归模型如下所示：
+让我们来详细分析一下 boosting 方法和最小二乘法。我们将第$m$步分类器的集合\origin{ensemble}记为$F_m$，将训练数据记为$X=\{ x_i\in \mathbb{R}^K, i=1\ldots N \}$，将对应的分类标签记为$Y=\{ y_i \in \{0,1 \}, i=1\ldots N \}$。$K=C\times S$表示特征的数量，其中的$C$是自发脑电的通道数量，$S$则是每一个时间元的样本数量。逻辑斯蒂克回归模型如下所示：
 
 \begin{equation}
-p_m(y_i=1|x_i)=\frac{e^{F_m(x_i)}}{e^{F_m(x_i)}+e^{-F_m(x_i)}}
+p_m(y_i=1|x_i)=\frac{e^{F_m(x_i)}}{e^{F_m(x_i)}+e^{-F_m(x_i)}}.
 \end{equation}
 
-$F_m$的\!{Bernuolli log-likelihood\footnote{伯努利对数似然函数}}如下式所示：
+$F_m$的伯努利对数似然函数如下式：
 
 \begin{equation}
-L(F_m; X, Y)=log(\prod\limits^N_{i=1}{p_m(y_i=1|x_i)^{y_i}p_m(y_i=0|x_i)^{1-y_i}})
+L(F_m; X, Y)=log\Bigl(\prod\limits^N_{i=1}{p_m(y_i=1|x_i)^{y_i}p_m(y_i=0|x_i)^{1-y_i}}\Bigr).
 \end{equation}
 
-该似然函数在$F_0:=0$，$F_m=F_{m-1}+f_m$
+定义$F_m$为初值为$F_0:=0$，对于$m\ne 0$，有：
+\begin{equation}
+  F_m=F_{m-1}+f_m
+\end{equation}
+  	
+用梯度下降法训练第$m$步的弱分类器，对每一个$x_i$，计算似然函数对$F$的一阶导数：
+\begin{equation}
+  \tilde{y}_i = \Bigl[\frac{\partial{L(F(\mathrm x_i))}}{\partial F(\mathrm x_i)}\Bigr]_{F=F_{m-1}}
+\end{equation}
+
+\begin{equation}
+  = 2(y_i-p_m(y_i=1|\mathrm x_i)).
+\end{equation}
+
+梯度的最小二乘拟合$f$为：
+\begin{equation}
+  f_m=\mathrm arg\ \mathrm min\ \sum^N_{i=1} (\tilde {y}_i-f(\mathrm x_i))^2.
+\end{equation}
+
+将一个$C$维度的回归系数向量和一个时间项$t$作为参数输入弱分类器，输出$t$时刻自发脑电样本的特征向量$x_i(t)$在回归系数上的投影：
+\begin{equation}
+  f(\mathrm{x}_i:\mathrm{w},t)=\mathrm{w}^T \mathrm{x}_i(t).
+\end{equation}
+
+对$t\in 1\ldots S$，通过最小二乘拟合$\mathrm{x}_i(t)$和$y_i$，计算$\mathrm{w}(t)$，选择误差值最小的参数组$(\mathrm{w}_m(t_m), t_m)$作为弱学习器的参数：
+\begin{equation}
+  f_m(\mathrm{x}_i)=f(\mathrm{x}_i;\mathrm{w}_m(t_m), t_m).
+\end{equation}
+
+现在弱分类器在分类器集合中的权重$\gamma_m$（等于梯度下降方向上的步长\origin{or equivalently the size of the step in direcion}$f_m$）通过下式计算得到：
+\begin{equation}
+  \gamma_m=\mathrm{arg}\ \mathrm{max}\ L(F_{m-1}+\gamma f_m; X, Y).
+\end{equation}
+
+为了提高 boosting 算法的普适性\origin{general performance}，缩小梯度下降的步长$\gamma_m$：
+\begin{equation}
+  F_m=F_{m-1}+\epsilon \gamma_m f_m
+\end{equation}
+
+步长的缩小降低了 gradient boosting 过程中步长过大以致$F$无法收敛\origin{lead to a $F$ with large $l2$ norm}的危险。
+
+计算$F$之后，再计算新的梯度值，然后新的计算下一个$F$的值。重复这一步骤直至迭代到一定次数$M$。如果迭代次数$M$的值过大，分类学习算法会导致过拟合；如果过小，则会导致拟合不充分；因此我们需要找到合适的迭代次数$M$。我们对每一个$M\in 1\ldots M_max$进行交叉验证\origin{cross-validation loop}，然后从中选出平均误差值最小的$M$。图1展示了分类器训练过程过程的伪代码。
+
+\begin{figure}[ht]
+  \includegraphics[width=0.5\textwidth]{img_trans/fig1}
+  \caption{分类器训练过程}
+\end{figure}
+
+\section{分类器输出的处理}
+完成分类器的训练后，就可以通过对每一个字符的分类器输出进行求和来推测另一组实验中用户选择的字符了。经过12次闪烁后，矩阵中的每个字符都各经过了两次闪烁（一次行闪烁，一次列闪烁），称为两个时间元，将这些时间元输入分类器，并对结果进行求和。
+
+分类器的输出是对该时间元含有 P300 的概率的估计，这和计算每个字符的 P300 期望次数时相对应的。期望次数最高的字符被认为是用户选择的目标字符。
+
+\section{实验结果}
+我们用第二节所述方法获得的数据以及2003年 BCI竞赛的数据对算法进行测试。所有实验的 boosting 算法最大迭代次数$M_max$均为200，$M$交叉验证优化循环次数为$30\times 10$，$\epsilon$值为$0.05$
+\subsection{实验记录数据}
+为了衡量本文所述方法的通用性，我们用第一（第二）组实验的数据训练了算法，然后将得到的分类器用于第二（第一）组实验数据的分类。仅排除训练数据中的伪迹，对于测试数据中的伪迹则予以保留。排除伪迹后得到的所有含 P300 的时间元以及随机选取的等量不含 P300 时间元用于训练分类器。
+
+3456项特征中，算法选取了其中的540项作为被试S1的第一组实验的特征，351项作为第二组实验的特征。对于被试S2，则分别是891项和1215项特征。平均约22\%的特征被用于分类。
+
+图2显示了使用第一组实验数据进行交叉验证的过程中的精确度变化，可以看到， gradient boosting 算法收敛于一个优化解，然后逐渐出现过拟合。
+\begin{figure}[ht]
+  \includegraphics[width=0.5\textwidth]{img_trans/fig2}
+  \caption{不同M值下的正确率变化}
+\end{figure}
+
+\begin{figure}[ht]
+  \includegraphics[width=0.5\textwidth]{img_trans/fig3}
+  \caption{不同重复次数下正确推断字符的比例}
+\end{figure}
+
+图3展示了预测错误的字符百分比和 P300 范式的重复次数（12次闪烁为一次重复实验）。重复实验9次后，两位被试都获得了10\%甚至更低的错误率。
+
+\subsection{2003 年 BCI 竞赛数据}
+为了和当前的 P300 检测技术进行比较，我们用2003年 BCI 竞赛的数据进行了测试。这一数据涵盖了三组实验，前两组实验包含指示 P300 出现时间的分类标签。第三组实验则没有分类标签，测试目标为尽可能准确地预测被试在三组实验中拼写的单词。
+
+我们用前两组实验数据训练了分类器，尔后用分类器来进行第三组数据中字符的推断。数据的预处理和第二节所述方法类似：数据经过一个通频带为0$-$9Hz的7阶 Butterworth 低通滤波器的处理，然后减去了平均值\origin{the temporal mean was removed}，然后抽样采样\origin{down sampled}数据至120Hz。通道 Fz, Cz, Pz, Oz, C3, C4, P4, PO7 以及 PO8 被用于分析，如文献[6]所述。图4为我们算法计算的字符以及对应的错误率，可以看到，实验结果要远好于第二节所述实验记录的数据。这可能是由于训练集的大小导致的：用于训练分类器的实验记录数据时间元数量仅为880个；而竞赛数据的时间元数量达到了2520个。
+
+2003年 BCI 竞赛的获奖方法需要大约5到11次重复实验来正确地拼写所有的字符，本文所述方法只需要4次重复实验。和当前的优秀算法相比，boosting 和最小二乘法相结合的方法有轻微的优势。然而，要验证该算法是否真的是目前最好的，还需要后续进行实验。
+
+\section{结论和后续工作}
+如前文所述可见，本文所提出的这种简单线性的 P300 检测方法适用于 BCI 系统并且效果优于当前的优秀算法。该算法能自动选取样本，这对于事件相关电位的检测十分重要。该算法很有可能适用于 P300 之外的其他类型的事件相关电位的检测，例如预备电位。
+
+为了进一步提高分类效果，值得对本算法在实验过程中产生的误差进行更深入的研究。从图4可以看到，误判的字符和正确的字符往往是相邻的。造成这种现象可能的原因在文献[8]中有分析，然而目前仍没有解决方案。
+\begin{figure}[ht]
+  \includegraphics[width=0.6\textwidth]{img_trans/table1}
+  \caption{重复次数，推断的字符，以及2003年 BCI 竞赛数据的错误率}
+\end{figure}
+
+另一种改进的可能，在于利用 P300 更多的特征来作为分类依据。目前只有最为显著的特征，如 $\delta$频带和$\theta$频带的时锁定反应\origin{time-locked responses}，又或者是$\alpha$频带的事件相关去同步反应，被用作分类的依据。
+
 
 \end{document}
